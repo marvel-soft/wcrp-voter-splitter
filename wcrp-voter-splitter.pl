@@ -35,7 +35,7 @@ no warnings "uninitialized";
 =cut
 
 my $records;
-my $inputFile = "../test-in/2019 1st Free List-600.csv";    
+my $inputFile = "precinct-voterstat-2019 1st Free List 1.7.19.csv";    
 
 my $fileName         = "";
 
@@ -47,7 +47,7 @@ my $printFileh;
 
 
 my $helpReq            = 0;
-my $maxLines           = "100";
+my $maxLines           = "50000";
 my $fileCount          = 1;
 my $csvHeadings        = "";
 my @csvHeadings;
@@ -85,9 +85,7 @@ sub main {
 
 	# pick out the heading line and hold it and remove end character
 	$csvHeadings = <INPUT>;
-	chomp $csvHeadings;
-	chop $csvHeadings;
-
+	
 	# headings in an array to modify
 	# @csvHeadings will be used to create the files
     @csvHeadings = split( /\s*,\s*/, $csvHeadings );
@@ -109,14 +107,10 @@ sub main {
 			$linesIncRead = 0;
 		}
 		
-		# Get the data into an array that matches the headers array
-		chomp $line1Read;
-
 		# replace commas from in between double quotes with a space
 		$line1Read =~ s/(?:\G(?!\A)|[^"]*")[^",]*\K(?:,|"(*SKIP)(*FAIL))/ /g;
 
-	    print $outputFileh $line1Read;
-
+	  print $outputFileh $line1Read;
 	
 		$linesWritten++;
 		#
