@@ -21,11 +21,17 @@ no warnings "uninitialized";
 =over
 =head2 Overview
 	This program will split large csv files into smaller ones
-		a) file is sorted by precinct ascending
+		a) no restrictions
 		b)
 	Input: any csv file with headers
 	       
-	Output: a smaller csv file
+	Output: one or more smaller csv file
+	parms:
+	'infile=s'  => \$inputFile,
+	'outile=s'  => \$outputFile,
+	'lines=s'   => \$maxLines,
+	'help!'     => \$helpReq,
+	
 =cut
 
 my $records;
