@@ -27,11 +27,11 @@ no warnings "uninitialized";
 	       
 	Output: one or more smaller csv file
 	parms:
-	'infile=s'  => \$inputFile,
-	'outile=s'  => \$outputFile,
-	'lines=s'   => \$maxLines,
-	'files=n'   => \$maxFiles,
-	'help!'     => \$helpReq,
+	'infile=s'     => \$inputFile,
+	'outfile=s'    => \$outputFile,
+	'maxlines=s'   => \$maxLines,
+	'maxfiles=n'   => \$maxFiles,
+	'help!'        => \$helpReq,
 	
 =cut
 
@@ -49,8 +49,8 @@ my $printFileh;
 
 my $helpReq            = 0;
 my $maxLines           = "100";
-my $maxFiles           = 1;
-my $fileCount          = 1;
+my $maxFiles           = 0;
+my $fileCount          = 0;
 my $csvHeadings        = "";
 my @csvHeadings;
 my $line1Read    = '';
@@ -68,20 +68,21 @@ sub main {
 
 	# Parse any parameters
 	GetOptions(
-		'infile=s'  => \$inputFile,
-		'outile=s'  => \$outputFile,
-		'lines=s'   => \$maxLines,
-		'help!'     => \$helpReq,
+		'infile=s'     => \$inputFile,
+		'outfile=s'    => \$outputFile,
+		'maxlines=s'   => \$maxLines,
+		'maxfiles=n'   => \$maxFiles,
+		'help!'        => \$helpReq,
 
-	) or die "Incorrect usage!\n";
+	) or die "Incorrect usage! \n";
 	if ($helpReq) {
-		print "Come on, it's really not that hard.\n";
+		print "Come on, it's really not that hard. \n";
 	}
 	else {
-		printLine ("My inputfile is: $inputFile.\n");
+		printLine ("My inputfile is: $inputFile. \n");
 	}
 	unless ( open( INPUT, $inputFile ) ) {
-		printLine ("Unable to open INPUT: $inputFile Reason: $!\n");
+		printLine ("Unable to open INPUT: $inputFile Reason: $! \n");
 		die;
 	}
 
@@ -99,18 +100,18 @@ sub main {
   NEW:
 	while ( $line1Read = <INPUT> ) {
 		if ($linesRead >= $maxLines) {
-      preparefile();
-			if ($fileCount > $maxFiles) {
-				printLine("Max Files created - $maxFiles");
+			if ($fileCount == $maxFiles) {
+				printLine("Max Files created - $maxFiles \n");
 				goto EXIT;
 			}
+      preparefile();
       $linesRead = 0;
 		}
 		$linesRead++;
 		$linesIncRead++;
 		if ($linesIncRead == 1000) {
-			printLine ("$linesRead lines processed\n");
-			$linesIncRead = 0;
+			printLine ("$linesRead lines processed \n");
+			$linesIncRead = 0; 
 		}
 		
 		# replace commas from in between double quotes with a space
@@ -137,7 +138,7 @@ main();
 # Common Exit
 EXIT:
 
-printLine ("<===> Completed transformation of: $inputFile");
+printLine ("<===> Completed splitting of: $inputFile \n");
 printLine ("<===> Total Records Read: $linesRead \n");
 printLine ("<===> Total Records written: $linesWritten \n");
 
@@ -162,10 +163,10 @@ sub printLine  {
 #
 sub preparefile {
     my ($filename, $path, $type) = fileparse($inputFile, qr/\.[^.]*/);
+    $fileCount = $fileCount+1;
     my $outputFile = $filename . '-' . $fileCount . $type;
 	  printLine ("New output file: $outputFile \n");
 	  open( $outputFileh, ">$outputFile" )
-	    or die "Unable to open output: $outputFile Reason: $!";
+	    or die "Unable to open output: $outputFile Reason: $! \n";
 	  print $outputFileh $csvHeadings;
-    $fileCount = $fileCount+1;
 }
