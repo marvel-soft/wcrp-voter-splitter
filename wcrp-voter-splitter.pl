@@ -30,12 +30,13 @@ no warnings "uninitialized";
 	'infile=s'  => \$inputFile,
 	'outile=s'  => \$outputFile,
 	'lines=s'   => \$maxLines,
+	'files=n'   => \$maxFiles,
 	'help!'     => \$helpReq,
 	
 =cut
 
 my $records;
-my $inputFile = "precinct-voterstat-2019 1st Free List 1.7.19.csv";    
+my $inputFile = "../test-in/2019.nv.VoterList.ElgbVtr-200.csv";    
 
 my $fileName         = "";
 
@@ -47,7 +48,8 @@ my $printFileh;
 
 
 my $helpReq            = 0;
-my $maxLines           = "50000";
+my $maxLines           = "100";
+my $maxFiles           = 1;
 my $fileCount          = 1;
 my $csvHeadings        = "";
 my @csvHeadings;
@@ -98,6 +100,10 @@ sub main {
 	while ( $line1Read = <INPUT> ) {
 		if ($linesRead >= $maxLines) {
       preparefile();
+			if ($fileCount > $maxFiles) {
+				printLine("Max Files created - $maxFiles");
+				goto EXIT;
+			}
       $linesRead = 0;
 		}
 		$linesRead++;
@@ -157,9 +163,9 @@ sub printLine  {
 sub preparefile {
     my ($filename, $path, $type) = fileparse($inputFile, qr/\.[^.]*/);
     my $outputFile = $filename . '-' . $fileCount . $type;
-	  printLine ("New output file: $outputFile");
+	  printLine ("New output file: $outputFile \n");
 	  open( $outputFileh, ">$outputFile" )
-	  or die "Unable to open output: $outputFile Reason: $!";
+	    or die "Unable to open output: $outputFile Reason: $!";
 	  print $outputFileh $csvHeadings;
     $fileCount = $fileCount+1;
 }
