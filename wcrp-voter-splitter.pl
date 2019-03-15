@@ -36,7 +36,8 @@ no warnings "uninitialized";
 =cut
 
 my $records;
-my $inputFile = "../test-in/2019.nv.VoterList.ElgbVtr-200.csv";    
+#my $inputFile = "../prod-in/2019.nv.VoterList.ElgbVtr.csv";    
+my $inputFile = "../test-in/2019.nv.VoterList.ElgbVtr.csv";    
 
 my $fileName         = "";
 
@@ -48,8 +49,8 @@ my $printFileh;
 
 
 my $helpReq            = 0;
-my $maxLines           = "100";
-my $maxFiles           = 0;
+my $maxLines           = 20000;
+my $maxFiles           = 40;
 my $fileCount          = 0;
 my $csvHeadings        = "";
 my @csvHeadings;
@@ -70,7 +71,7 @@ sub main {
 	GetOptions(
 		'infile=s'     => \$inputFile,
 		'outfile=s'    => \$outputFile,
-		'maxlines=s'   => \$maxLines,
+		'maxlines=n'   => \$maxLines,
 		'maxfiles=n'   => \$maxFiles,
 		'help!'        => \$helpReq,
 
