@@ -29,6 +29,7 @@ no warnings "uninitialized";
 	parms:
 	'infile=s'     => \$inputFile,
 	'outfile=s'    => \$outputFile,
+	'headerfile=s'    => \$outputFile,
 	'maxlines=s'   => \$maxLines,
 	'maxfiles=n'   => \$maxFiles,
 	'help!'        => \$helpReq,
@@ -36,20 +37,24 @@ no warnings "uninitialized";
 =cut
 
 my $records;
-my $inputFile = "../prod-in1/base.csv";    
+#my $inputFile = "../prod-in1/base.csv";    
+my $inputFile = "../prod-cc/VoterList.ElgbVtr.20190327.csv";    
 
 my $fileName         = "";
 
 my $outputFile        = "../prod-in1/";
 my $outputFileh;
 
+my $headerFile        = "header.csv";
+my $headerFileh;
+
 my $printFile        = "print-.txt";
 my $printFileh;
 
 
 my $helpReq            = 0;
-my $maxLines           = 25000;
-my $maxFiles           = 30;
+my $maxLines           = 50000;
+my $maxFiles           = 40;
 my $fileCount          = 0;
 my $csvHeadings        = "";
 my @csvHeadings;
@@ -116,7 +121,7 @@ sub main {
 		
 		# replace commas from in between double quotes with a space
 		$line1Read =~ s/(?:\G(?!\A)|[^"]*")[^",]*\K(?:,|"(*SKIP)(*FAIL))/ /g;
-
+		$line1Read =~ s/"/ /g;
 	  print $outputFileh $line1Read;
 	
 		$linesWritten++;
